@@ -53,11 +53,11 @@ t2 = DockerOperator(
     ],
     auto_remove=True,
     docker_url="unix://var/run/docker.sock",
-    network_mode="bridge",
+    network_mode="elt_elt_network",  
     mounts=[
-        Mount(source='/Users/zuper/Documentos/Estudio/elt/custom_postgres',
+        Mount(source='/opt/dbt',  
               target='/dbt', type='bind'),
-        Mount(source='/Users/zuper/.dbt', target='/root', type='bind'),
+        Mount(source='/root/.dbt', target='/root', type='bind'),
     ],
     dag=dag
 )

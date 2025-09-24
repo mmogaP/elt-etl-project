@@ -22,39 +22,6 @@ services:
       - POSTGRES_DB=destination_db
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=secret
-  
-  # elt_script:
-  #   build:
-  #     context: ./elt
-  #     dockerfile: Dockerfile
-  #   command: ["python", "elt_script.py"]
-  #   networks:
-  #     - elt_network
-  #   depends_on:
-  #     - source_postgres
-  #     - destination_postgres
-  
-  # dbt:
-  #   image: ghcr.io/dbt-labs/dbt-postgres:1.4.7
-  #   command:
-  #     [
-  #       "run",
-  #       "--profiles-dir",
-  #       "/root",
-  #       "--project-dir",
-  #       "/dbt"
-  #     ]
-  #   networks:
-  #     - elt_network
-  #   volumes:
-  #     - ./custom_postgres:/dbt
-  #     - ~/.dbt:/root
-  #   depends_on:
-  #     elt_script:
-  #       condition: service_completed_successfully #importante, dbt debe ir al final
-  #   environment:
-  #     - DBT_PROFILE=default
-  #     - DBT_TARGET=dev
 
   postgres:
     image: postgres:15
@@ -64,26 +31,16 @@ services:
       - POSTGRES_USER=airflow
       - POSTGRES_PASSWORD=airflow
       - POSTGRES_DB=airflow
-  
-  init-airflow:
-    image: apache/airflow:latest
-    depends_on:
-      - postgres
-    networks:
-      - elt_network
-    environment:
-      - AIRFLOW__DATABASE__SQL_ALCHEMY_CONN=postgresql+psycopg2://airflow:airflow@postgres/airflow
-    command: >
-      bash -c "airflow db init && 
-               airflow users create --username airflow --password password --firstname Mauricio --lastname Moraga --role Admin --email admin@example.com"
 
-  webserver:
+  airflow:
     build:
       context: .
       dockerfile: Dockerfile
     user: root
     depends_on:
       - postgres
+      - source_postgres
+      - destination_postgres
     networks:
       - elt_network
     extra_hosts:
@@ -98,48 +55,53 @@ services:
       - LOAD_EX=n
       - EXECUTOR=Local
       - AIRFLOW__DATABASE__SQL_ALCHEMY_CONN=postgresql+psycopg2://airflow:airflow@postgres/airflow
-      - AIRFLOW_CONN_DESTINATION_POSTGRES=postgres://postgres:secret@destination_postgres:5434/destination_db
+      - AIRFLOW_CONN_DESTINATION_POSTGRES=postgres://postgres:secret@destination_postgres:5432/destination_db
       - AIRFLOW__CORE__FERNET_KEY=plIipb9RU3-3wJ1UNaAtqVNJrqFEks1-dGbJM34EW7U=
-      - AIRFLOW__WEBSERVER__DEFAULT_USER_USERNAME=airflow
-      - AIRFLOW__WEBSERVER__DEFAULT_USER_PASSWORD=password
-      - AIRFLOW_WWW_USER_USERNAME=airflow
-      - AIRFLOW_WWW_USER_PASSWORD=password
+      - AIRFLOW__API__AUTH_BACKENDS=airflow.api.auth.backend.basic_auth
       - AIRFLOW__WEBSERVER__SECRET_KEY=secret
+      - AIRFLOW__CORE__LOAD_EXAMPLES=False
     ports:
       - "8080:8080"
-    command: webserver
-  scheduler:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    user: root
-    depends_on:
-      - postgres
-    networks:
-      - elt_network
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
-    volumes:
-      - ./airflow/dags:/opt/airflow/dags
-      - ./elt:/opt/airflow/elt
-      - ./custom_postgres:/opt/dbt
-      - ~/.dbt:/root/.dbt
-      - /var/run/docker.sock:/var/run/docker.sock
-    environment:
-      - LOAD_EX=n
-      - EXECUTOR=Local
-      - AIRFLOW__DATABASE__SQL_ALCHEMY_CONN=postgresql+psycopg2://airflow:airflow@postgres/airflow
-      - AIRFLOW_CONN_DESTINATION_POSTGRES=postgres://postgres:secret@destination_postgres:5434/destination_db
-      - AIRFLOW__CORE__FERNET_KEY=plIipb9RU3-3wJ1UNaAtqVNJrqFEks1-dGbJM34EW7U=
-      - AIRFLOW__WEBSERVER__DEFAULT_USER_USERNAME=airflow
-      - AIRFLOW__WEBSERVER__DEFAULT_USER_PASSWORD=password
-      - AIRFLOW_WWW_USER_USERNAME=airflow
-      - AIRFLOW_WWW_USER_PASSWORD=password
-      - AIRFLOW__WEBSERVER__SECRET_KEY=secret
-    ports:
-      - "8080:8080"
-    command: scheduler
+    entrypoint: >
+      bash -c "
+      echo 'Initializing Airflow database...'
+      airflow db migrate
+      
+      echo 'Creating admin user...'
+          python3 -c \"
+      import os
+      import sys
+      from airflow.auth.managers.fab.models import User
+      from airflow import settings
+      from sqlalchemy.orm import sessionmaker
 
+      # Create session
+      Session = sessionmaker(bind=settings.engine)
+      session = Session()
+
+      # Check if user exists
+      existing_user = session.query(User).filter_by(username='airflow').first()
+      if not existing_user:
+          from werkzeug.security import generate_password_hash
+          user = User(
+              username='airflow',
+              email='admin@example.com',
+              first_name='Admin',
+              last_name='User',
+              password=generate_password_hash('password'),
+              active=True
+          )
+          session.add(user)
+          session.commit()
+          print('Admin user created')
+      else:
+          print('Admin user already exists')
+      session.close()
+      \"
+            
+            echo 'Starting Airflow...'
+            exec airflow standalone
+            "
 
 networks:
   elt_network:
