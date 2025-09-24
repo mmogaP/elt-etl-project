@@ -1,0 +1,29 @@
+[0m15:53:53.249643 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'start', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x0000023632CD4C20>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x0000023630A0DE50>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x0000023634E0BC50>]}
+
+
+============================== 15:53:53.258296 | 85fa347d-f4f9-4801-ba78-45845c0c0801 ==============================
+[0m15:53:53.258296 [info ] [MainThread]: Running with dbt=1.10.11
+[0m15:53:53.258935 [debug] [MainThread]: running dbt with arguments {'partial_parse': 'True', 'write_json': 'True', 'send_anonymous_usage_stats': 'True', 'use_colors': 'True', 'cache_selected_only': 'False', 'target_path': 'None', 'version_check': 'True', 'invocation_command': 'dbt init', 'log_format': 'default', 'warn_error': 'None', 'introspect': 'True', 'debug': 'False', 'log_cache_events': 'False', 'fail_fast': 'False', 'no_print': 'None', 'use_experimental_parser': 'False', 'empty': 'None', 'quiet': 'False', 'printer_width': '80', 'log_path': 'logs', 'indirect_selection': 'eager', 'profiles_dir': 'C:\\Users\\zuper\\.dbt', 'warn_error_options': 'WarnErrorOptionsV2(error=[], warn=[], silence=[])', 'static_parser': 'True'}
+[0m15:53:57.782720 [debug] [MainThread]: Starter project path: C:\Users\zuper\AppData\Roaming\Python\Python313\site-packages\dbt\include\starter_project
+[0m15:53:57.794699 [info ] [MainThread]: 
+Your new dbt project "custom_postgres" was created!
+
+For more information on how to configure the profiles.yml file,
+please consult the dbt documentation here:
+
+  https://docs.getdbt.com/docs/configure-your-profile
+
+One more thing:
+
+Need help? Don't hesitate to reach out to us via GitHub issues or on Slack:
+
+  https://community.getdbt.com/
+
+Happy modeling!
+
+[0m15:53:57.795713 [info ] [MainThread]: Setting up your profile.
+[0m15:54:54.614653 [info ] [MainThread]: Profile custom_postgres written to C:\Users\zuper\.dbt\profiles.yml using target's profile_template.yml and your supplied values. Run 'dbt debug' to validate the connection.
+[0m15:54:54.615746 [debug] [MainThread]: Command `dbt init` succeeded at 15:54:54.615643 after 61.46 seconds
+[0m15:54:54.616108 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'end', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x0000023634F68510>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x0000023634ED70B0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x0000023633CD5E10>]}
+[0m15:54:54.616592 [debug] [MainThread]: Flushing usage events
+[0m15:54:55.563350 [debug] [MainThread]: An error was encountered while trying to flush usage events
