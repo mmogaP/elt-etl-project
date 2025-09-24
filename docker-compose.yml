@@ -1,6 +1,6 @@
 services:
   source_postgres:
-    image: postgres:latest
+    image: postgres:15
     ports:
       - "5433:5432"
     networks:
@@ -13,7 +13,7 @@ services:
       - ./source_db_init/init.sql:/docker-entrypoint-initdb.d/init.sql
     
   destination_postgres:
-    image: postgres:latest
+    image: postgres:15
     ports:
       - "5434:5432"
     networks:
