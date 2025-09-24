@@ -1,6 +1,7 @@
 from datetime import datetime, timedelta
 from airflow import DAG
 from docker.types import Mount
+import os
 
 from airflow.operators.python import PythonOperator  
 from airflow.operators.bash import BashOperator
@@ -55,11 +56,13 @@ t2 = DockerOperator(
     docker_url="unix://var/run/docker.sock",
     network_mode="elt_elt_network",  
     mounts=[
-        Mount(source='/opt/dbt',  
+        # Usando raw string (r"") para evitar problemas con backslashes
+        Mount(source=r'C:\Users\zuper\Documentos\Estudio\elt\custom_postgres',  
               target='/dbt', type='bind'),
-        Mount(source='/root/.dbt', target='/root', type='bind'),
+        Mount(source=r'C:\Users\zuper\.dbt', target='/root', type='bind'),
     ],
     dag=dag
 )
 
 t1 >> t2
+
