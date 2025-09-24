@@ -2,7 +2,7 @@ from datetime import datetime, timedelta
 from airflow import DAG
 from docker.types import Mount
 
-from airflow.operators.python_operator import PythonOperator
+from airflow.operators.python import PythonOperator  
 from airflow.operators.bash import BashOperator
 
 from airflow.providers.docker.operators.docker import DockerOperator
@@ -51,7 +51,7 @@ t2 = DockerOperator(
         "/dbt",
         "--full-refresh"
     ],
-    auto_remove=True,
+    auto_remove='success',
     docker_url="unix://var/run/docker.sock",
     network_mode="elt_elt_network",  
     mounts=[
