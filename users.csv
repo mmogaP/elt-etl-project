@@ -1,0 +1,16 @@
+id,first_name,last_name,email,date_of_birth,country,signup_date,is_active
+1,John,Doe,john.doe@example.com,1990-01-01,USA,2020-05-10,true
+2,Jane,Smith,jane.smith@example.com,1992-05-15,Canada,2021-07-22,true
+3,Alice,Johnson,alice.johnson@example.com,1985-10-20,UK,2019-03-18,false
+4,Bob,Williams,bob.williams@example.com,1998-07-30,Australia,2022-01-05,true
+5,Emily,Clark,emily.clark@example.com,1987-02-14,USA,2020-11-12,false
+6,Michael,Robinson,michael.robinson@example.com,1995-06-05,Canada,2021-09-30,true
+7,Sarah,Lewis,sarah.lewis@example.com,1989-03-25,UK,2019-08-21,true
+8,David,Walker,david.walker@example.com,1992-11-12,Australia,2022-03-15,true
+9,Sophia,Hall,sophia.hall@example.com,1996-08-08,USA,2020-06-01,true
+10,James,Allen,james.allen@example.com,1984-04-20,Canada,2018-12-11,false
+11,Olivia,Young,olivia.young@example.com,1993-12-30,USA,2021-04-19,true
+12,Chris,King,chris.king@example.com,1990-09-15,Australia,2022-02-25,true
+13,Grace,Wright,grace.wright@example.com,1997-05-10,UK,2020-07-14,true
+14,William,Scott,william.scott@example.com,1986-07-22,USA,2019-05-09,false
+15,Ethan,Turner,ethan.turner@example.com,1999-11-03,Canada,2021-10-07,true
