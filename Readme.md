@@ -26,8 +26,8 @@ El script `dataflow_users.py` ejecuta el _pipeline_ de Apache Beam para el paso 
 1. **Fuente de Datos:** Lee el archivo `users.csv` ubicado en Cloud Storage (`gs://elt-demo-bucket/users.csv`).
 2. **Destino (Staging):** Carga los datos en la tabla `elt-pipeline-473714.staging.users`.
 
-![Dataflow cargado](Screenshot_1.png)
-![Tabla users](Screenshot_2.png)
+![Dataflow cargado](assets\Screenshot_1.png)
+![Tabla users](assets\Screenshot_2.png)
 
 ### Fase 2: Transformación (BigQuery SQL)
 
@@ -37,7 +37,7 @@ Una vez que Dataflow ha cargado los datos en la capa de _staging_, la tarea de t
 2. **Lógica de Negocio:** Calcula la **`age`** (Edad) utilizando la función `DATE_DIFF` y la columna `date_of_birth`.
 3. **Destino (Análisis):** Crea o reemplaza la tabla `elt-pipeline-473714.analytics.users_clean`.
 
-![Transformación](Screenshot_3.png)
+![Transformación](assets\Screenshot_3.png)
 
 ### Fase 3: Automatización y Orquestación (Cloud Composer)
 
@@ -47,7 +47,7 @@ El archivo `elt_pipeline_dag.py` define el DAG de Airflow que garantiza que el f
 2. `transform_data_to_analytics` (BigQueryInsertJobOperator): Ejecuta el SQL de transformación.
 3. `cleanup_cloud_storage_temp` (Bash Operator): Limpia el bucket temporal.
 
-![Composer](Screenshot_4.png)
+![Composer](assets\Screenshot_4.png)
 
 ---
 

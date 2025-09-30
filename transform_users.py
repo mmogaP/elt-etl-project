@@ -44,7 +44,7 @@ def ensure_dataset_exists(dataset_id):
         # Intenta obtener el dataset. Si no existe, lanza una excepción NotFound.
         client.get_dataset(full_dataset_id)
         print(f"-> Dataset '{dataset_id}' ya existe.")
-    except gcp_exceptions.NotFound: # Uso de la excepción importada correctamente
+    except gcp_exceptions.NotFound: 
         print(f"-> Dataset '{dataset_id}' no encontrado. Creándolo...")
         dataset = bigquery.Dataset(full_dataset_id)
         dataset.location = "us-central1" 

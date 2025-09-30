@@ -1,8 +1,8 @@
 import apache_beam as beam
 from apache_beam.options.pipeline_options import PipelineOptions
 
-PROJECT_ID = "elt-pipeline-473714" # 🔹 pon aquí tu project_id
-BUCKET = "elt-demo-bucket"  # 🔹 tu bucket
+PROJECT_ID = "elt-pipeline-473714" 
+BUCKET = "elt-demo-bucket"  
 DATASET = "staging"
 TABLE = "users"
 
